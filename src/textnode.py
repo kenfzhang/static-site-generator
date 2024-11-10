@@ -10,11 +10,10 @@ class TextType(Enum):
 
 class TextNode:
     """
-    Properties:
-        text :  Text content of the node
-        text_type : The type of text this node contains,
-                    which is a member of the TextType enum.
-        url :   the URL of the link or image, if the node is one
+    text :      Text content of the node
+    text_type : The type of text this node contains,
+                which is a member of the TextType enum.
+    url :       The URL of the link or image, if the node is one
                 of those types.
     """
     def __init__(self, text, text_type, url = None):
