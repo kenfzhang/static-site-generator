@@ -1,6 +1,6 @@
 import unittest
 
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 class TestHTMLNode(unittest.TestCase):
     def test_props_to_html_no_props(self):
@@ -58,3 +58,42 @@ class TestLeafNode(unittest.TestCase):
             self.fail()
         except ValueError:
             pass
+
+class TestParentNode(unittest.TestCase):
+    def test_parent_to_html(self):
+        pn = ParentNode("div", [LeafNode("p", "Some text")])
+        pn_html = '<div><p>Some text</p></div>'
+        self.assertEqual(pn_html, pn.to_html())
+
+    def test_parent_multi_leaf(self):
+        pn = ParentNode("div", [
+            LeafNode("p", "1"),
+            LeafNode("p", "2"),
+            LeafNode("p", "3"),
+        ])
+        pn_html = "<div><p>1</p><p>2</p><p>3</p></div>"
+        self.assertEqual(pn_html, pn.to_html())
+
+    def test_parent_recursive(self):
+        pn = ParentNode("div", [ParentNode("div", [
+            LeafNode("p", "Inner paragraph")
+        ]), LeafNode("p", "Outer paragraph")])
+        pn_html = '<div><div><p>Inner paragraph</p></div><p>Outer paragraph</p></div>'
+        self.assertEqual(pn_html, pn.to_html())
+
+    def test_parent_no_tag(self):
+        pn = ParentNode(None, [LeafNode("p", "Some text")])
+        try:
+            print(pn.to_html())
+            self.fail()
+        except ValueError:
+            pass
+
+    def test_parent_no_children(self):
+        pn = ParentNode("div", None)
+        try:
+            print(pn.to_html())
+            self.fail()
+        except ValueError:
+            pass
+
